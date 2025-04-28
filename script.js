@@ -1,5 +1,15 @@
+let isElainaBirthday = false;
+let birthdayC = JSON.parse(localStorage.getItem("birthdayClose"));
+let birthdayClose = birthdayC !== null ? birthdayC : false;
+
 document.addEventListener("DOMContentLoaded", function () {
-    createKoreanGreeting();
+    const closeCard = document.querySelector(".closeCard");
+
+    closeCard.addEventListener("click", () => {
+        const card = document.querySelector(".birthdayCard");
+        localStorage.setItem("birthdayClose", true);
+        card.style.display = "none";
+    });
 
     function updateClock() {
         const now = new Date();
@@ -7,6 +17,9 @@ document.addEventListener("DOMContentLoaded", function () {
         const minutes = String(now.getMinutes()).padStart(2, "0");
         const seconds = String(now.getSeconds()).padStart(2, "0");
         $("#time").text(`${hours}:${minutes}:${seconds}`);
+        if (hours === "00" && minutes === "00" && seconds === "00") {
+            updateDate();
+        }
     }
 
     function updateDate() {
@@ -25,11 +38,17 @@ document.addEventListener("DOMContentLoaded", function () {
         ];
         const weekday = weekdays[now.getDay()];
         $("#date").text(`${year}.${month}.${day} ${weekday}`);
+        if (month === "10" && day === "17") {
+            isElainaBirthday = true;
+        } else {
+            localStorage.setItem("birthdayClose", false);
+        }
     }
 
     setInterval(updateClock, 1000);
     updateClock();
     updateDate();
+    createKoreanGreeting();
 
     const searchInput = document.getElementById("search");
     searchInput.addEventListener("keypress", function (e) {
@@ -154,22 +173,18 @@ function createKoreanGreeting() {
         "아침부터 저를 생각하다니, 참 대단한 사람이네요?",
         "햇살만큼 빛나는 하루를 보내세요. 물론 저보단 못하겠지만요.",
     ];
-
     const afternoonGreetings = [
         "점심시간이에요. 저처럼 우아하게 식사를 즐기세요.",
         "이렇게 멋진 오후를 보내는 건, 저와 닮았네요?",
         "너무 무리하지 말고, 저처럼 여유롭게 살아야 해요.",
     ];
-
     const eveningGreetings = [
         "좋은 저녁입니다. 오늘 하루도 고생 많았어요.",
         "하루를 멋지게 마무리하는 건, 저에게나 어울리는 일이지만... 당신도 해보세요.",
         "별빛처럼 빛나는 밤을 보내세요. 물론 저처럼은 힘들겠지만요.",
     ];
-
     const now = new Date();
     const hour = now.getHours();
-
     let greetings;
     if (hour >= 5 && hour < 12) {
         greetings = morningGreetings;
@@ -178,9 +193,12 @@ function createKoreanGreeting() {
     } else {
         greetings = eveningGreetings;
     }
-
     const randomGreeting =
         greetings[Math.floor(Math.random() * greetings.length)];
-
-    $("#greeting").text(`${randomGreeting} ${username}님.`);
+    if (isElainaBirthday) {
+        if (!birthdayClose) {
+            document.querySelector(".birthdayCard").style.display = "block";
+        }
+    }
+    return $("#greeting").text(`${randomGreeting} ${username}님.`);
 }
