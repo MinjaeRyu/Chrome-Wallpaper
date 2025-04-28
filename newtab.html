@@ -17,6 +17,20 @@
         <link rel="stylesheet" href="styles.css" />
     </head>
     <body>
+        <div class="birthdayCard" style="display: none">
+            <p>
+                안녕하세요, 여러분. 오늘은 제가 태어난 날이랍니다. 특별할 것
+                없지만, 그래도 조용히 축하해주시면 감사하겠어요. 어쩌면 이
+                순간을 기념할 가치가 있을지도 모르니까요.
+            </p>
+            <p>
+                덧붙여, 오늘 하루는
+                <span class="highlight">조용히 여행을 떠날 예정</span>이에요.
+                언제나 그렇듯, 제 생일이지만 아무렇지 않게 지나갈 거예요.
+            </p>
+            <p>그런 게 마녀의 생일이라면, 이상할 게 없겠죠?</p>
+            <button class="closeCard">닫기</button>
+        </div>
         <div id="shortcutContainer"></div>
 
         <video id="bg-video" autoplay muted loop playsinline>
@@ -42,7 +56,6 @@
         </div>
         <div id="addShortcut" class="none">
             <button id="closeShortcut" class="close-btn">×</button>
-            <!-- Close button -->
             <input
                 type="text"
                 id="addName"
