@@ -293,3 +293,41 @@ a:hover {
 .none {
     display: none;
 }
+#closeShortcut {
+    width: 25px;
+    height: 25px;
+    border-radius: calc(4px * var(--scale));
+    background: #fff;
+}
+#closeShortcut {
+    width: 25px;
+    height: 25px;
+    border-radius: calc(4px * var(--scale));
+    background: #fff;
+}
+.birthdayCard {
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 30px;
+    margin-top: 10%;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+}
+.birthdayCard p {
+    font-size: 18px;
+    line-height: 1.6;
+    color: #555;
+}
+.highlight {
+    color: #9c56e5;
+    font-weight: bold;
+}
+
+.closeCard {
+    background-color: #9c56e5;
+    color: #fff;
+    padding: 10px;
+    border-radius: 10px;
+}
