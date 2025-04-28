@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <title>새 탭</title>
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link
+            href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+            rel="stylesheet"
+        />
+        <link
+            rel="stylesheet"
+            href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200"
+        />
+        <script src="./jquery-3.7.1.min.js"></script>
+        <link rel="stylesheet" href="styles.css" />
+    </head>
+    <body>
+        <div id="shortcutContainer"></div>
+
+        <video id="bg-video" autoplay muted loop playsinline>
+            <source src="bg.mp4" type="video/mp4" />
+            Your browser does not support the video tag.
+        </video>
+
+        <div class="content">
+            <div class="search-box">
+                <input
+                    id="search"
+                    type="text"
+                    placeholder="Search with Google..."
+                    autocomplete="off"
+                />
+            </div>
+
+            <h1 id="greeting">좋은 아침이에요.</h1>
+        </div>
+        <div class="clock-container">
+            <div class="time" id="time">00:00:00</div>
+            <div class="date" id="date">0000.00.00 월요일</div>
+        </div>
+        <div id="addShortcut" class="none">
+            <button id="closeShortcut" class="close-btn">×</button>
+            <!-- Close button -->
+            <input
+                type="text"
+                id="addName"
+                max="10"
+                placeholder="Website Name"
+            />
+            <input type="text" id="addUrl" placeholder="Website Url" />
+            <button id="appendShortcut">Add</button>
+        </div>
+    </body>
+    <script src="script.js"></script>
+</html>

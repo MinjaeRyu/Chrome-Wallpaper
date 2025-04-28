@@ -1,0 +1,295 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Poppins", sans-serif;
+}
+html,
+body {
+    --scale: 0.8;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    font-family: "Arial", sans-serif;
+}
+#bg-video {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    min-width: 100%;
+    min-height: 100%;
+    width: 100%;
+    height: 100%;
+    transform: translate(-50%, -50%);
+    object-fit: cover;
+    z-index: -1;
+}
+.content {
+    position: relative;
+    z-index: 1;
+    height: 100%;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    text-shadow: 2px 2px 10px rgba(0, 0, 0, 0.7);
+    gap: 20px;
+}
+.clock-container {
+    position: absolute;
+    bottom: 20px;
+    right: 40px;
+    text-align: right;
+    color: white;
+    text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.6);
+}
+.date {
+    font-size: 20px;
+    opacity: 0.8;
+    margin-top: -5px;
+}
+.time {
+    display: flex;
+    align-items: baseline;
+    font-size: 48px;
+    font-weight: 500;
+}
+.clock div {
+    padding: 0 5px;
+}
+
+.search-box {
+    margin-bottom: 40%;
+}
+.search-box input {
+    padding: 5px 20px;
+    width: 400px;
+    max-width: 90%;
+    font-size: 18px;
+    border: none;
+    border-radius: 30px;
+    outline: none;
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+    background: rgba(255, 255, 255, 0.2);
+    color: white;
+    text-align: center;
+}
+
+.search-box input::placeholder {
+    color: rgba(255, 255, 255, 0.7);
+}
+*,
+*::before,
+*::after,
+*:focus {
+    border: none;
+    box-sizing: border-box;
+    color: inherit;
+    font-family: "Poppins", sans-serif;
+    margin: 0;
+    padding: 0;
+    outline: none;
+    text-decoration: none;
+}
+
+a:hover {
+    cursor: pointer;
+}
+
+.material-symbols-outlined {
+    font-variation-settings: "FILL" 0, "wght" 400, "GRAD" 0,
+        "opsz" calc(20 * var(--scale));
+}
+
+#shortcutContainer {
+    align-items: flex-start;
+    display: flex;
+    flex-direction: column;
+    gap: calc(16px * var(--scale));
+    max-width: 100vw;
+    flex-wrap: wrap;
+    position: absolute;
+    top: 10vh;
+    left: 2vw;
+    transform: none;
+    z-index: 9999;
+    width: calc(200px * var(--scale));
+}
+
+#shortcutContainer .link {
+    position: relative;
+    border-radius: calc(10px * var(--scale));
+}
+
+#shortcutContainer .link .shortcutLink {
+    align-items: center;
+    background: transparent;
+    color: #fff;
+    display: flex;
+    flex-direction: column;
+    font-size: calc(14px * var(--scale));
+    height: calc(88px * var(--scale));
+    justify-content: space-between;
+    width: calc(80px * var(--scale));
+}
+
+#shortcutContainer .link .shortcutLink img {
+    background: rgba(255, 255, 255, 0.8);
+    height: calc(60px * var(--scale));
+    width: calc(60px * var(--scale));
+    padding: calc(8px * var(--scale));
+    border-radius: calc(10px * var(--scale));
+}
+
+#shortcutContainer .link .shortcutLink p {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    text-align: center;
+    width: 100%;
+}
+
+#shortcutContainer .link a#createShortcut span {
+    align-items: center;
+    background: rgba(255, 255, 255, 0.8);
+    border-radius: calc(10px * var(--scale));
+    color: #000;
+    display: flex;
+    justify-content: center;
+    height: calc(60px * var(--scale));
+    width: calc(60px * var(--scale));
+}
+
+#shortcutContainer .link .removeLink {
+    position: absolute;
+    z-index: 1;
+    top: -100%;
+    right: -100%;
+    background: #333;
+    height: calc(29px * var(--scale));
+    width: calc(29px * var(--scale));
+    display: flex;
+    align-items: center;
+    display: none;
+    justify-content: center;
+    border-radius: 100px;
+    color: #fff;
+    transition: all 0.3s ease-in-out;
+}
+
+#shortcutContainer .link:hover .removeLink {
+    top: calc(-8px * var(--scale));
+    right: 0;
+    display: block;
+}
+
+#shortcutContainer .link .removeLink:hover {
+    background: #0072ff;
+}
+
+#time {
+    font-size: calc(56px * var(--scale));
+    font-weight: 500;
+    line-height: calc(56px * var(--scale));
+}
+
+#today {
+    font-size: calc(24px * var(--scale));
+    font-weight: 300;
+}
+
+#links {
+    bottom: calc(24px * var(--scale));
+    color: #fff;
+    display: flex;
+    font-size: calc(16px * var(--scale));
+    gap: calc(24px * var(--scale));
+    left: calc(24px * var(--scale));
+    position: absolute;
+    transform-origin: bottom left;
+    z-index: 9999;
+}
+
+#links a span {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 50%;
+    padding: calc(8px * var(--scale));
+    transition: background 0.3s ease-in-out;
+}
+
+#links a:hover span {
+    background: rgba(0, 0, 0, 0.6);
+}
+
+#links a {
+    align-items: center;
+    cursor: pointer;
+    display: flex;
+    gap: calc(4px * var(--scale));
+    justify-content: center;
+    position: relative;
+}
+
+#links a::after {
+    background: #fff;
+    bottom: 0;
+    content: "";
+    height: calc(2px * var(--scale));
+    right: 0;
+    position: absolute;
+    width: 0;
+    transition: width 0.3s ease-in-out;
+}
+
+.active {
+    background: #0072ff;
+    border-radius: 1000px;
+    box-shadow: 0 0 16px -4px #000;
+    color: #fff;
+    scale: 0.8;
+}
+
+#addShortcut {
+    position: absolute;
+    top: 5vh;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #fff9;
+    border-radius: calc(10px * var(--scale));
+    padding: calc(16px * var(--scale));
+    min-height: fit-content !important;
+    width: calc(400px * var(--scale));
+    max-width: 90vw;
+    flex-wrap: wrap;
+    z-index: 9999;
+    gap: calc(16px * var(--scale));
+}
+
+#addShortcut input {
+    background: #fff;
+    border-radius: calc(4px * var(--scale));
+    padding: calc(8px * var(--scale));
+    height: calc(48px * var(--scale));
+    font-size: calc(16px * var(--scale));
+    width: 100%;
+}
+
+#addShortcut #appendShortcut {
+    background: #0072ff;
+    border-radius: calc(4px * var(--scale));
+    padding: calc(8px * var(--scale));
+    height: calc(48px * var(--scale));
+    font-size: calc(16px * var(--scale));
+    color: #fff;
+    width: 100%;
+}
+
+.flex {
+    display: flex;
+}
+
+.none {
+    display: none;
+}
