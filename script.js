@@ -1,8 +1,50 @@
-let isElainaBirthday = false;
+let isBirthday = false;
 let birthdayC = JSON.parse(localStorage.getItem("birthdayClose"));
 let birthdayClose = birthdayC !== null ? birthdayC : false;
+let play = localStorage.getItem("isPlaying") === "true";
+
+let volume1 = localStorage.getItem("volume");
+let volume = volume1 !== null ? volume1 : 0.2;
 
 document.addEventListener("DOMContentLoaded", function () {
+    const audio = document.getElementById("bg-audio");
+    const button = document.getElementById("toggleButton");
+    const audioIcon = document.getElementById("audioIcon");
+
+    if (play) {
+        audio.play();
+        play = true;
+        audioIcon.textContent = "volume_up";
+    } else {
+        audioIcon.textContent = "volume_off";
+    }
+
+    volumeSlider.value = volume;
+    audio.volume = volume;
+    $("#volumeText").text(`${Math.floor(volume * 100)}%`);
+    volumeSlider.addEventListener("input", function () {
+        audio.volume = volumeSlider.value;
+        localStorage.setItem("volume", volumeSlider.value);
+        $("#volumeText").text(`${Math.floor(audio.volume * 100)}%`);
+    });
+
+    button.addEventListener("click", function () {
+        if (audio.paused) {
+            audio
+                .play()
+                .then(() => {
+                    localStorage.setItem("isPlaying", "true");
+                    audioIcon.textContent = "volume_up";
+                })
+                .catch((error) => {
+                    console.error("Audio Error", error);
+                });
+        } else {
+            audio.pause();
+            localStorage.setItem("isPlaying", "false");
+            audioIcon.textContent = "volume_off";
+        }
+    });
     const closeCard = document.querySelector(".closeCard");
 
     closeCard.addEventListener("click", () => {
@@ -38,8 +80,8 @@ document.addEventListener("DOMContentLoaded", function () {
         ];
         const weekday = weekdays[now.getDay()];
         $("#date").text(`${year}.${month}.${day} ${weekday}`);
-        if (month === "10" && day === "17") {
-            isElainaBirthday = true;
+        if (month === "06" && day === "25") {
+            isBirthday = true;
         } else {
             localStorage.setItem("birthdayClose", false);
         }
@@ -158,31 +200,31 @@ let user = JSON.parse(localStorage.getItem("username"));
 let username = user !== null ? user : "";
 
 if (!username) {
-    username = prompt(
-        "당신의 이름을 알려주시겠어요? (네, 저는 굉장히 관대한 마녀랍니다.)"
-    );
+    username = prompt("당신의 이름을 알려주시겠어요?");
     if (username) {
         localStorage.setItem("username", JSON.stringify(username));
     } else {
-        username = "이름 없는 방랑자";
+        username = "";
     }
 }
 function createKoreanGreeting() {
     const morningGreetings = [
-        "좋은 아침이에요. 저처럼 상쾌한 하루를 시작해보세요.",
-        "아침부터 저를 생각하다니, 참 대단한 사람이네요?",
-        "햇살만큼 빛나는 하루를 보내세요. 물론 저보단 못하겠지만요.",
+        `어서와 선생님. 기다리고 있었어. 아니아니! 오래 기다린건 아니야!`,
+        `좋은아침이야 ${username}선생.`,
+        `${username}선생님 아침은 먹었어? 아침을 먹어야 머리가 잘 돌아간다구.`,
     ];
     const afternoonGreetings = [
-        "점심시간이에요. 저처럼 우아하게 식사를 즐기세요.",
-        "이렇게 멋진 오후를 보내는 건, 저와 닮았네요?",
-        "너무 무리하지 말고, 저처럼 여유롭게 살아야 해요.",
+        `안녕 ${username}선생! 안바빠? 안바쁘면... 아니야! 혼잣말이야!`,
+        `오늘은 아르바이트가 없어, 선생님은? 역시 바쁘구나...`,
+        `선배들은 무얼 하고 있으려나?`,
     ];
+
     const eveningGreetings = [
-        "좋은 저녁입니다. 오늘 하루도 고생 많았어요.",
-        "하루를 멋지게 마무리하는 건, 저에게나 어울리는 일이지만... 당신도 해보세요.",
-        "별빛처럼 빛나는 밤을 보내세요. 물론 저처럼은 힘들겠지만요.",
+        `좋아 오늘 하루도 끝! 선생도 고생 많았어!`,
+        `언젠가, 다른 사람들처럼 쉴 수 있으려나...`,
+        `아비도스 학교도 언젠간 다른 학교처럼 돌아올거라고 믿어.`,
     ];
+
     const now = new Date();
     const hour = now.getHours();
     let greetings;
@@ -195,10 +237,10 @@ function createKoreanGreeting() {
     }
     const randomGreeting =
         greetings[Math.floor(Math.random() * greetings.length)];
-    if (isElainaBirthday) {
+    if (isBirthday) {
         if (!birthdayClose) {
             document.querySelector(".birthdayCard").style.display = "block";
         }
     }
-    return $("#greeting").text(`${randomGreeting} ${username}님.`);
+    return $("#greeting").text(`${randomGreeting}`);
 }
