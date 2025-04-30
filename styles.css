@@ -514,3 +514,6 @@ a:hover {
     background-color: #fff0;
     cursor: pointer;
 }
+.hidden {
+    display: none;
+}
