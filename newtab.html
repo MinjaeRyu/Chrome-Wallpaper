@@ -10,14 +10,8 @@
             rel="stylesheet"
         />
         <link rel="shortcut icon" href="/" type="image/x-icon" />
-
-        <link
-            rel="stylesheet"
-            href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200"
-        />
-
-        <script src="./assets/jquery-3.7.1.min.js"></script>
         <link rel="stylesheet" href="styles.css" />
+        <script src="./assets/jquery-3.7.1.min.js"></script>
     </head>
     <body>
         <div class="birthdayCard" style="display: none">
@@ -42,6 +36,12 @@
             />
             Your browser does not support the video tag.
         </video>
+        <!-- 
+        <img
+            id="bg-image"
+            src="./assets/image.jpeg"
+        /> -->
+
         <audio id="bg-audio" loop>
             <source
                 src="./assets/ブルーアーカイブ Blue Archive OST 9. Midsummer Cat.mp3"
@@ -50,32 +50,35 @@
             Your browser does not support the audio tag.
         </audio>
 
-        <div class="audioControlWrapper">
-            <button class="toggleButton" id="toggleButton">
-                <span id="audioIcon" class="material-symbols-outlined"
-                    >volume_up</span
-                >
+        <button id="settingsButton" class="settings-btn">
+            <span class="material-symbols-outlined">settings</span>
+        </button>
+
+        <div id="settingsPanel" class="settings-panel" style="display: none">
+            <button id="closeSettings" class="setting-close-btn">
+                <span class="material-symbols-outlined">close</span>
             </button>
-            <input
-                type="range"
-                id="volumeSlider"
-                min="0"
-                max="1"
-                step="0.01"
-                value="1"
-            />
-            <p id="volumeText">20%</p>
+            <h2>설정</h2>
+            <div class="setting-item">
+                <div class="audioControlWrapper">
+                    <button class="toggleButton" id="toggleButton">
+                        <span id="audioIcon" class="material-symbols-outlined"
+                            >volume_up</span
+                        >
+                    </button>
+                    <input
+                        type="range"
+                        id="volumeSlider"
+                        min="0"
+                        max="1"
+                        step="0.01"
+                        value="1"
+                    />
+                    <p id="volumeText">100%</p>
+                </div>
+            </div>
         </div>
 
-        <!-- <label for="volumeControl">Volume: </label>
-        <input
-            type="range"
-            id="volumeControl"
-            min="0"
-            max="1"
-            step="0.01"
-            value="1"
-        /> -->
         <div id="notification-container" class="notification-container"></div>
         <div class="content">
             <div class="search-box">
@@ -86,7 +89,6 @@
                     autocomplete="off"
                 />
             </div>
-
             <h1 id="greeting">좋은 아침이에요.</h1>
         </div>
         <div class="clock-container">
