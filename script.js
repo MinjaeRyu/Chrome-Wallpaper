@@ -12,6 +12,20 @@ document.addEventListener("DOMContentLoaded", function () {
     const button = document.getElementById("toggleButton");
     const audioIcon = document.getElementById("audioIcon");
     const volumeSlider = document.getElementById("volumeSlider");
+    const video = document.getElementById("bg-video");
+
+    if (!audio || typeof audio.play !== "function") {
+        showNotification(
+            "사용하시는 브라우저가 오디오 태그를 지원하지 않습니다.",
+            false
+        );
+    }
+    if (!video || typeof video.play !== "function") {
+        showNotification(
+            "사용하시는 브라우저가 비디오 태그를 지원하지 않습니다.",
+            false
+        );
+    }
 
     if (play) {
         audio.play();
@@ -239,17 +253,21 @@ function showNotification(msg, isOnline) {
 
     const statusDot = `
         <span class="status-dot" style="background-color: ${
-            isOnline === null ? (isOnline ? "#4CAF50" : "#F44336") : "#FFF"
+            isOnline !== null ? (isOnline ? "#4CAF50" : "#F44336") : "#FFF"
         };"></span>
     `;
 
     notification.innerHTML = `
         ${statusDot}
-        <span class="close-btn" onclick="this.parentElement.remove()">
+        <span class="close-btn">
             <span class="material-symbols-outlined">close</span>
         </span>
         ${msg}
     `;
+    const closeBtn = notification.querySelector(".close-btn");
+    closeBtn.addEventListener("click", function () {
+        notification.remove();
+    });
 
     container.appendChild(notification);
 
@@ -275,3 +293,17 @@ if (!navigator.onLine) {
 
 window.addEventListener("online", updateStatus);
 window.addEventListener("offline", updateStatus);
+const settingsBtn = document.getElementById("settingsButton");
+const settingsPanel = document.getElementById("settingsPanel");
+const closeSettingsBtn = document.getElementById("closeSettings");
+const bgAudio = document.getElementById("bg-audio");
+const volumeSlider = document.getElementById("volumeSlider");
+const volumeText = document.getElementById("volumeText");
+
+settingsBtn.addEventListener("click", () => {
+    settingsPanel.style.display = "block";
+});
+
+closeSettingsBtn.addEventListener("click", () => {
+    settingsPanel.style.display = "none";
+});
