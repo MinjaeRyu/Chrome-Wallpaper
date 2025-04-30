@@ -2,7 +2,8 @@ let isBirthday = false;
 let birthdayC = JSON.parse(localStorage.getItem("birthdayClose"));
 let birthdayClose = birthdayC !== null ? birthdayC : false;
 let play = localStorage.getItem("isPlaying") === "true";
-
+let user = JSON.parse(localStorage.getItem("username"));
+let username = user !== null ? user : "";
 let volume1 = localStorage.getItem("volume");
 let volume = volume1 !== null ? volume1 : 0.2;
 
@@ -10,6 +11,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const audio = document.getElementById("bg-audio");
     const button = document.getElementById("toggleButton");
     const audioIcon = document.getElementById("audioIcon");
+    const volumeSlider = document.getElementById("volumeSlider");
 
     if (play) {
         audio.play();
@@ -21,7 +23,9 @@ document.addEventListener("DOMContentLoaded", function () {
 
     volumeSlider.value = volume;
     audio.volume = volume;
+
     $("#volumeText").text(`${Math.floor(volume * 100)}%`);
+
     volumeSlider.addEventListener("input", function () {
         audio.volume = volumeSlider.value;
         localStorage.setItem("volume", volumeSlider.value);
@@ -45,6 +49,7 @@ document.addEventListener("DOMContentLoaded", function () {
             audioIcon.textContent = "volume_off";
         }
     });
+
     const closeCard = document.querySelector(".closeCard");
 
     closeCard.addEventListener("click", () => {
@@ -104,100 +109,80 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 const links = [
-    {
-        name: "Github",
-        url: "https://github.com",
-    },
-    {
-        name: "Youtube",
-        url: "https://www.youtube.com",
-    },
-    {
-        name: "X",
-        url: "https://x.com",
-    },
+    { name: "Github", url: "https://github.com" },
+    { name: "Youtube", url: "https://www.youtube.com" },
+    { name: "X", url: "https://x.com" },
 ];
-let stored_links = JSON.parse(localStorage.getItem("shortcuts"));
-let shortcut_data = stored_links !== null ? stored_links : links;
+
+let storedLinks = JSON.parse(localStorage.getItem("shortcuts"));
+let shortcutData = storedLinks !== null ? storedLinks : links;
 
 function createShortcuts() {
-    const shortcut_element = $("#shortcutContainer");
-    const closeShortcut = $("#closeShortcut");
-    let add_shortcut = $("#addShortcut");
-    let add_name = $("#addName");
-    let add_url = $("#addUrl");
-    let append_shortcut = $("#appendShortcut");
+    const container = $("#shortcutContainer");
+    const closeBtn = $("#closeShortcut");
+    const form = $("#addShortcut");
+    const nameInput = $("#addName");
+    const urlInput = $("#addUrl");
+    const addBtn = $("#appendShortcut");
 
-    shortcut_element.empty();
+    container.empty();
 
-    for (let i = 0; i < shortcut_data.length; i++) {
-        const link = shortcut_data[i];
-        const link_name = link.name;
-        const link_url = link.url;
-        const link_element = `
+    shortcutData.forEach((link) => {
+        const element = `
             <div class="link">
-                <a href="${link_url}"  rel="noopener noreferrer" title="${link_url}" class="shortcutLink">
-                    <img src="https://www.google.com/s2/favicons?domain=${link_url}&sz=48"></img>
-                    <p>${link_name}</p>
+                <a href="${link.url}" rel="noopener noreferrer" title="${link.url}" class="shortcutLink">
+                    <img src="https://www.google.com/s2/favicons?domain=${link.url}&sz=48" />
+                    <p>${link.name}</p>
                 </a>
-                <a class="removeLink" title="Delete ${link_name} shortcut" removeLink="${link_url}">
+                <a class="removeLink" title="Delete ${link.name} shortcut" removeLink="${link.url}">
                     <span class="material-symbols-outlined">close</span>
                 </a>
             </div>`;
-        shortcut_element.append(link_element);
-    }
-
-    const createLinkButton = `<div class="link">
-        <a id="createShortcut" title="Add new shortcut" class="shortcutLink">
-            <span class="material-symbols-outlined">add</span>
-            <p>Add</p>
-        </a>
-    </div>`;
-
-    shortcut_element.append(createLinkButton);
-    const create_shortcut = $("#createShortcut");
-
-    create_shortcut.click(function () {
-        add_shortcut.toggleClass("flex").toggleClass("none");
-    });
-    closeShortcut.click(function () {
-        add_shortcut.toggleClass("none").toggleClass("flex");
+        container.append(element);
     });
 
-    append_shortcut.click(function () {
-        let link_name = add_name.val();
-        let link_url = add_url.val();
-        if (link_name && link_url) {
-            if (
-                !link_url.includes("http://") &&
-                !link_url.includes("https://")
-            ) {
-                link_url = `http://${link_url}`;
+    container.append(`
+        <div class="link">
+            <a id="createShortcut" title="Add new shortcut" class="shortcutLink">
+                <span class="material-symbols-outlined">add</span>
+                <p>Add</p>
+            </a>
+        </div>`);
+
+    $("#createShortcut").click(() => {
+        form.toggleClass("flex").toggleClass("none");
+    });
+
+    closeBtn.click(() => {
+        form.toggleClass("none").toggleClass("flex");
+    });
+
+    addBtn.click(() => {
+        let name = nameInput.val();
+        let url = urlInput.val();
+        if (name && url) {
+            if (!url.includes("http://") && !url.includes("https://")) {
+                url = `http://${url}`;
             }
-            shortcut_data.push({ name: link_name, url: link_url });
-            localStorage.setItem("shortcuts", JSON.stringify(shortcut_data));
-            add_shortcut.toggleClass("flex").toggleClass("none");
+            shortcutData.push({ name, url });
+            localStorage.setItem("shortcuts", JSON.stringify(shortcutData));
+            form.toggleClass("flex").toggleClass("none");
             createShortcuts();
         }
-        add_name.val("");
-        add_url.val("");
+        nameInput.val("");
+        urlInput.val("");
     });
 
     $(document).on("click", ".removeLink", function (e) {
         e.preventDefault();
-        const linkToRemove = $(this).attr("removeLink");
-        const newLinks = shortcut_data.filter(
-            (link) => link.url !== linkToRemove
-        );
-        localStorage.setItem("shortcuts", JSON.stringify(newLinks));
-        shortcut_data = newLinks;
+        const targetUrl = $(this).attr("removeLink");
+        shortcutData = shortcutData.filter((link) => link.url !== targetUrl);
+        localStorage.setItem("shortcuts", JSON.stringify(shortcutData));
         createShortcuts();
     });
 }
 
 createShortcuts();
-let user = JSON.parse(localStorage.getItem("username"));
-let username = user !== null ? user : "";
 
 if (!username) {
     username = prompt("당신의 이름을 알려주시겠어요?");
@@ -207,19 +192,19 @@ if (!username) {
         username = "";
     }
 }
+
 function createKoreanGreeting() {
-    const morningGreetings = [
+    const morning = [
         `어서와 선생님. 기다리고 있었어. 아니아니! 오래 기다린건 아니야!`,
         `좋은아침이야 ${username}선생.`,
         `${username}선생님 아침은 먹었어? 아침을 먹어야 머리가 잘 돌아간다구.`,
     ];
-    const afternoonGreetings = [
+    const afternoon = [
         `안녕 ${username}선생! 안바빠? 안바쁘면... 아니야! 혼잣말이야!`,
         `오늘은 아르바이트가 없어, 선생님은? 역시 바쁘구나...`,
         `선배들은 무얼 하고 있으려나?`,
     ];
-
-    const eveningGreetings = [
+    const evening = [
         `좋아 오늘 하루도 끝! 선생도 고생 많았어!`,
         `언젠가, 다른 사람들처럼 쉴 수 있으려나...`,
         `아비도스 학교도 언젠간 다른 학교처럼 돌아올거라고 믿어.`,
@@ -227,20 +212,66 @@ function createKoreanGreeting() {
 
     const now = new Date();
     const hour = now.getHours();
-    let greetings;
+
+    let greetingList;
     if (hour >= 5 && hour < 12) {
-        greetings = morningGreetings;
+        greetingList = morning;
     } else if (hour >= 12 && hour < 18) {
-        greetings = afternoonGreetings;
+        greetingList = afternoon;
     } else {
-        greetings = eveningGreetings;
+        greetingList = evening;
     }
+
     const randomGreeting =
-        greetings[Math.floor(Math.random() * greetings.length)];
-    if (isBirthday) {
-        if (!birthdayClose) {
-            document.querySelector(".birthdayCard").style.display = "block";
-        }
+        greetingList[Math.floor(Math.random() * greetingList.length)];
+
+    if (isBirthday && !birthdayClose) {
+        document.querySelector(".birthdayCard").style.display = "block";
     }
-    return $("#greeting").text(`${randomGreeting}`);
+
+    $("#greeting").text(`${randomGreeting}`);
 }
+function showNotification(msg, isOnline) {
+    const container = document.getElementById("notification-container");
+
+    const notification = document.createElement("div");
+    notification.className = "notification";
+
+    const statusDot = `
+        <span class="status-dot" style="background-color: ${
+            isOnline === null ? (isOnline ? "#4CAF50" : "#F44336") : "#FFF"
+        };"></span>
+    `;
+
+    notification.innerHTML = `
+        ${statusDot}
+        <span class="close-btn" onclick="this.parentElement.remove()">
+            <span class="material-symbols-outlined">close</span>
+        </span>
+        ${msg}
+    `;
+
+    container.appendChild(notification);
+
+    setTimeout(() => {
+        notification.style.animation = "fadeOut 0.5s forwards";
+        setTimeout(() => {
+            notification.remove();
+        }, 500);
+    }, 5000);
+}
+
+function updateStatus() {
+    if (navigator.onLine) {
+        showNotification("인터넷에 다시 연결되었습니다.", true);
+    } else {
+        showNotification("인터넷에 연결되어 있지 않습니다.", false);
+    }
+}
+
+if (!navigator.onLine) {
+    showNotification("인터넷에 연결되어 있지 않습니다.", false);
+}
+
+window.addEventListener("online", updateStatus);
+window.addEventListener("offline", updateStatus);
