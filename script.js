@@ -296,13 +296,15 @@ window.addEventListener("offline", updateStatus);
 const settingsBtn = document.getElementById("settingsButton");
 const settingsPanel = document.getElementById("settingsPanel");
 const closeSettingsBtn = document.getElementById("closeSettings");
-const bgAudio = document.getElementById("bg-audio");
-const volumeSlider = document.getElementById("volumeSlider");
-const volumeText = document.getElementById("volumeText");
 
 settingsBtn.addEventListener("click", () => {
-    settingsPanel.style.display = "block";
+    settingsPanel.classList.toggle("hidden");
 });
+
+closeSettingsBtn.addEventListener("click", () => {
+    settingsPanel.classList.toggle("hidden");
+});
+
 
 closeSettingsBtn.addEventListener("click", () => {
     settingsPanel.style.display = "none";
