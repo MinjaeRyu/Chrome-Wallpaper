@@ -17,13 +17,13 @@ document.addEventListener("DOMContentLoaded", function () {
     if (!audio || typeof audio.play !== "function") {
         showNotification(
             "사용하시는 브라우저가 오디오 태그를 지원하지 않습니다.",
-            false
+            "r"
         );
     }
     if (!video || typeof video.play !== "function") {
         showNotification(
             "사용하시는 브라우저가 비디오 태그를 지원하지 않습니다.",
-            false
+            "r"
         );
     }
 
@@ -207,33 +207,20 @@ if (!username) {
     }
 }
 
-function createKoreanGreeting() {
-    const morning = [
-        `어서와 선생님. 기다리고 있었어. 아니아니! 오래 기다린건 아니야!`,
-        `좋은아침이야 ${username}선생.`,
-        `${username}선생님 아침은 먹었어? 아침을 먹어야 머리가 잘 돌아간다구.`,
-    ];
-    const afternoon = [
-        `안녕 ${username}선생! 안바빠? 안바쁘면... 아니야! 혼잣말이야!`,
-        `오늘은 아르바이트가 없어, 선생님은? 역시 바쁘구나...`,
-        `선배들은 무얼 하고 있으려나?`,
-    ];
-    const evening = [
-        `좋아 오늘 하루도 끝! 선생도 고생 많았어!`,
-        `언젠가, 다른 사람들처럼 쉴 수 있으려나...`,
-        `아비도스 학교도 언젠간 다른 학교처럼 돌아올거라고 믿어.`,
-    ];
+async function createKoreanGreeting() {
+    const res = await fetch("./greeting.json");
+    const greetings = await res.json();
 
     const now = new Date();
     const hour = now.getHours();
 
     let greetingList;
     if (hour >= 5 && hour < 12) {
-        greetingList = morning;
+        greetingList = greetings.morning;
     } else if (hour >= 12 && hour < 18) {
-        greetingList = afternoon;
+        greetingList = greetings.afternoon;
     } else {
-        greetingList = evening;
+        greetingList = greetings.evening;
     }
 
     const randomGreeting =
@@ -243,18 +230,25 @@ function createKoreanGreeting() {
         document.querySelector(".birthdayCard").style.display = "block";
     }
 
-    $("#greeting").text(`${randomGreeting}`);
+    $("#greeting").text(randomGreeting.replace("${username}", username));
 }
-function showNotification(msg, isOnline) {
+function showNotification(msg, color = "#FFF") {
     const container = document.getElementById("notification-container");
 
     const notification = document.createElement("div");
     notification.className = "notification";
+    if (color === "y") {
+        color = "#FFEB3B";
+    } else if (color === "b") {
+        color = "#2196F3";
+    } else if (color === "g") {
+        color = "#4CAF50";
+    } else if (color === "r") {
+        color = "#F44336";
+    }
 
     const statusDot = `
-        <span class="status-dot" style="background-color: ${
-            isOnline !== null ? (isOnline ? "#4CAF50" : "#F44336") : "#FFF"
-        };"></span>
+        <span class="status-dot" style="background-color: ${color};"></span>
     `;
 
     notification.innerHTML = `
@@ -281,14 +275,14 @@ function showNotification(msg, isOnline) {
 
 function updateStatus() {
     if (navigator.onLine) {
-        showNotification("인터넷에 다시 연결되었습니다.", true);
+        showNotification("인터넷에 다시 연결되었습니다.", "g");
     } else {
-        showNotification("인터넷에 연결되어 있지 않습니다.", false);
+        showNotification("인터넷 연결이 끊어졌습니다.", "r");
     }
 }
 
 if (!navigator.onLine) {
-    showNotification("인터넷에 연결되어 있지 않습니다.", false);
+    showNotification("인터넷에 연결되어 있지 않습니다.", "r");
 }
 
 window.addEventListener("online", updateStatus);
@@ -303,9 +297,4 @@ settingsBtn.addEventListener("click", () => {
 
 closeSettingsBtn.addEventListener("click", () => {
     settingsPanel.classList.toggle("hidden");
-});
-
-
-closeSettingsBtn.addEventListener("click", () => {
-    settingsPanel.style.display = "none";
 });
