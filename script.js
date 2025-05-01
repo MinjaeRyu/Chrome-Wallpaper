@@ -1,6 +1,3 @@
-let isBirthday = false;
-let birthdayC = JSON.parse(localStorage.getItem("birthdayClose"));
-let birthdayClose = birthdayC !== null ? birthdayC : false;
 let play = localStorage.getItem("isPlaying") === "true";
 let user = JSON.parse(localStorage.getItem("username"));
 let username = user !== null ? user : "";
@@ -89,14 +86,6 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     });
 
-    const closeCard = document.querySelector(".closeCard");
-
-    closeCard.addEventListener("click", () => {
-        const card = document.querySelector(".birthdayCard");
-        localStorage.setItem("birthdayClose", true);
-        card.style.display = "none";
-    });
-
     function updateClock() {
         const now = new Date();
         const hours = String(now.getHours()).padStart(2, "0");
@@ -108,7 +97,7 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     }
 
-    function updateDate() {
+    async function updateDate() {
         const now = new Date();
         const year = now.getFullYear();
         const month = String(now.getMonth() + 1).padStart(2, "0");
@@ -124,10 +113,15 @@ document.addEventListener("DOMContentLoaded", function () {
         ];
         const weekday = weekdays[now.getDay()];
         $("#date").text(`${year}.${month}.${day} ${weekday}`);
-        if (month === "06" && day === "25") {
-            isBirthday = true;
-        } else {
-            localStorage.setItem("birthdayClose", false);
+        const res = await fetch("./config.json");
+        const data = await res.json();
+        const birthday = data.birthday;
+
+        if (
+            month === birthday.split("/")[0] &&
+            day === birthday.split("/")[1]
+        ) {
+            showNotification("오늘은 내 생일이야. 축하해줘!", "🎉", 30);
         }
     }
 
@@ -227,7 +221,7 @@ if (!username) {
     if (username) {
         localStorage.setItem("username", JSON.stringify(username));
     } else {
-        fetch("./greeting.json")
+        fetch("./config.json")
             .then((res) => res.json())
             .then((greetings) => {
                 username = greetings.defaultName;
@@ -238,7 +232,7 @@ if (!username) {
 
 async function createKoreanGreeting(bo) {
     if (!bo) return $("#greeting").text("");
-    const res = await fetch("./greeting.json");
+    const res = await fetch("./config.json");
     const greetings = await res.json();
 
     const now = new Date();
@@ -256,29 +250,29 @@ async function createKoreanGreeting(bo) {
     const randomGreeting =
         greetingList[Math.floor(Math.random() * greetingList.length)];
 
-    if (isBirthday && !birthdayClose) {
-        document.querySelector(".birthdayCard").style.display = "block";
-    }
-
     $("#greeting").text(randomGreeting.replace("${username}", username));
 }
-function showNotification(msg, color = "#FFF") {
+async function showNotification(msg, data, time = 5) {
+    let text = "";
+    let color = "";
     const container = document.getElementById("notification-container");
 
     const notification = document.createElement("div");
     notification.className = "notification";
-    if (color === "y") {
-        color = "#FFEB3B";
-    } else if (color === "b") {
-        color = "#2196F3";
-    } else if (color === "g") {
-        color = "#4CAF50";
-    } else if (color === "r") {
-        color = "#F44336";
+    if (data === "y") {
+        color = "background-color: #FFEB3B;";
+    } else if (data === "b") {
+        color = "background-color: #2196F3;";
+    } else if (data === "g") {
+        color = "background-color: #4CAF50;";
+    } else if (data === "r") {
+        color = "background-color: #F44336;";
+    } else {
+        text = data;
     }
 
     const statusDot = `
-        <span class="status-dot" style="background-color: ${color};"></span>
+        <span class="status-dot" style="${color}">${text}</span>
     `;
 
     notification.innerHTML = `
@@ -300,7 +294,7 @@ function showNotification(msg, color = "#FFF") {
         setTimeout(() => {
             notification.remove();
         }, 500);
-    }, 5000);
+    }, time * 1000);
 }
 
 function updateStatus() {
