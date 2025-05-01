@@ -350,7 +350,7 @@ a:hover {
     display: flex;
     flex-direction: row;
     gap: 8px;
-    width: 30px;
+    width: 100%;
 }
 
 .toggleButton {
@@ -365,7 +365,7 @@ a:hover {
     justify-content: center;
 }
 #volumeSlider {
-    width: 250px;
+    width: 180px;
     height: 4px;
     background: #ccc;
     border-radius: 5px;
@@ -382,23 +382,6 @@ a:hover {
     pointer-events: auto;
     transition: opacity 0.3s ease, visibility 0.3s ease;
 }
-
-/* #volumeSlider::-webkit-slider-thumb {
-    appearance: none;
-    width: 12px;
-    height: 12px;
-    border-radius: 50%;
-    background: #000;
-    cursor: pointer;
-}
-
-#volumeSlider::-moz-range-thumb {
-    width: 12px;
-    height: 12px;
-    border-radius: 50%;
-    background: #000;
-    cursor: pointer;
-} */
 
 .notification-container {
     position: fixed;
