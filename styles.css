@@ -376,7 +376,7 @@ a:hover {
     border-radius: 8px;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
     position: relative;
-    min-width: 200px;
+    min-width: 300px;
     width: auto;
     padding-right: 50px;
     transform: translateY(20px);

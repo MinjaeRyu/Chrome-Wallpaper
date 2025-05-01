@@ -38,13 +38,13 @@ document.addEventListener("DOMContentLoaded", function () {
 
     if (!audio || typeof audio.play !== "function") {
         showNotification(
-            "사용하시는 브라우저가 오디오 태그를 지원하지 않습니다.",
+            "사용하시는 브라우저가 오디오 태그를 지원하지 않아요.",
             "r"
         );
     }
     if (!video || typeof video.play !== "function") {
         showNotification(
-            "사용하시는 브라우저가 비디오 태그를 지원하지 않습니다.",
+            "사용하시는 브라우저가 비디오 태그를 지원하지 않아요.",
             "r"
         );
     }
@@ -299,14 +299,14 @@ async function showNotification(msg, data, time = 5) {
 
 function updateStatus() {
     if (navigator.onLine) {
-        showNotification("인터넷에 다시 연결되었습니다.", "g");
+        showNotification("네트워크에 다시 연결되었어요.", "g");
     } else {
-        showNotification("인터넷 연결이 끊어졌습니다.", "r");
+        showNotification("네트워크 연결이 끊어졌어요.", "r");
     }
 }
 
 if (!navigator.onLine) {
-    showNotification("인터넷에 연결되어 있지 않습니다.", "r");
+    showNotification("네트워크에 연결되어 있지 않아요.", "r");
 }
 
 window.addEventListener("online", updateStatus);
@@ -339,8 +339,24 @@ const submitBtn = document.getElementById("submitBtn");
 input.value = username;
 submitBtn.addEventListener("click", () => {
     if (username === input.value)
-        return showNotification("이름이 같습니다.", "y");
+        return showNotification("전에 이름과 같아요.", "y");
     localStorage.setItem("username", JSON.stringify(input.value));
-    showNotification("이름이 변경되었습니다.", "g");
+    showNotification("이름이 성공적으로 변경했어요.", "g");
     username = input.value;
 });
+
+window.onerror = function (message, source, lineno, colno, error) {
+    console.error(
+        "전역 에러 발생:",
+        message,
+        "소스:",
+        source,
+        "줄:",
+        lineno,
+        "컬럼:",
+        colno,
+        "에러 객체:",
+        error
+    );
+    showNotification("에러가 발생했어요. 로그를 확인해주세요.", "r", 10);
+};
