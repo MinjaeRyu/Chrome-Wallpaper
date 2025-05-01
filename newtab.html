@@ -36,11 +36,12 @@
             />
             Your browser does not support the video tag.
         </video>
-        <!-- 
+
         <img
             id="bg-image"
-            src="./assets/image.jpeg"
-        /> -->
+            class="bg-image hidden"
+            src="./assets/photo-1475274047050-1d0c0975c63e.png"
+        />
 
         <audio id="bg-audio" loop>
             <source
@@ -49,6 +50,7 @@
             />
             Your browser does not support the audio tag.
         </audio>
+        <div id="bg" class="bg hidden"></div>
 
         <button id="settingsButton" class="settings-btn">
             <span class="material-symbols-outlined">settings</span>
@@ -76,6 +78,17 @@
                     />
                     <p id="volumeText">100%</p>
                 </div>
+                <label class="toggle-wrapper">
+                    <label class="switch">
+                        <input
+                            type="checkbox"
+                            class="toggle-input"
+                            id="toggleSwitch-1"
+                        />
+                        <span class="slider"></span>
+                    </label>
+                    <span>일반인 코스플레이</span>
+                </label>
             </div>
         </div>
 
@@ -91,6 +104,7 @@
             </div>
             <h1 id="greeting">좋은 아침이에요.</h1>
         </div>
+
         <div class="clock-container">
             <div class="time" id="time">00:00:00</div>
             <div class="date" id="date">0000.00.00 월요일</div>
