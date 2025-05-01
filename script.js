@@ -227,7 +227,12 @@ if (!username) {
     if (username) {
         localStorage.setItem("username", JSON.stringify(username));
     } else {
-        username = "";
+        fetch("./greeting.json")
+            .then((res) => res.json())
+            .then((greetings) => {
+                username = greetings.defaultName;
+                localStorage.setItem("username", JSON.stringify(username));
+            });
     }
 }
 
@@ -323,3 +328,25 @@ settingsBtn.addEventListener("click", () => {
 closeSettingsBtn.addEventListener("click", () => {
     settingsPanel.classList.toggle("hidden");
 });
+
+document.addEventListener("click", (e) => {
+    if (
+        !settingsPanel.classList.contains("hidden") &&
+        !settingsPanel.contains(e.target) &&
+        !settingsBtn.contains(e.target)
+    ) {
+        settingsPanel.classList.add("hidden");
+    }
+});
+
+const input = document.getElementById("nameInput");
+const submitBtn = document.getElementById("submitBtn");
+
+input.value = username;
+submitBtn.addEventListener("click", () => {
+    if (username === input.value)
+        return showNotification("이름이 같습니다.", "y");
+    localStorage.setItem("username", JSON.stringify(input.value));
+    showNotification("이름이 변경되었습니다.", "b");
+});
+
