@@ -489,6 +489,8 @@ a:hover {
     border-radius: 8px;
     cursor: pointer;
     font-size: 16px;
+    height: 50px;
+    width: 50px;
 }
 .settings-panel {
     position: fixed;
@@ -496,7 +498,6 @@ a:hover {
     right: 20px;
     width: 300px;
     height: 200px;
-
     background-color: #fff;
     border: 1px solid #ccc;
     border-radius: 12px;
