@@ -590,6 +590,9 @@ a:hover {
     margin-bottom: 65px;
     margin-right: 20px;
 }
+#submitBtn:hover {
+    background-color: #015cc8;
+}
 
 #version {
     position: absolute;
