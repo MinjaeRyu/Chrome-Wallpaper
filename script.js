@@ -347,6 +347,6 @@ submitBtn.addEventListener("click", () => {
     if (username === input.value)
         return showNotification("이름이 같습니다.", "y");
     localStorage.setItem("username", JSON.stringify(input.value));
-    showNotification("이름이 변경되었습니다.", "b");
+    showNotification("이름이 변경되었습니다.", "g");
     username = input.value;
 });
