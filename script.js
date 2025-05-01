@@ -6,6 +6,7 @@ let user = JSON.parse(localStorage.getItem("username"));
 let username = user !== null ? user : "";
 let volume1 = localStorage.getItem("volume");
 let volume = volume1 !== null ? volume1 : 0.2;
+let checkBox1 = localStorage.getItem("checkBox1") === "true";
 
 document.addEventListener("DOMContentLoaded", function () {
     const audio = document.getElementById("bg-audio");
@@ -13,6 +14,30 @@ document.addEventListener("DOMContentLoaded", function () {
     const audioIcon = document.getElementById("audioIcon");
     const volumeSlider = document.getElementById("volumeSlider");
     const video = document.getElementById("bg-video");
+    const image = document.getElementById("bg-image");
+    const toggle = document.getElementById("toggleSwitch-1");
+
+    toggle.addEventListener("change", function () {
+        localStorage.setItem("checkBox1", this.checked);
+        if (this.checked === true) {
+            video.classList.add("hidden");
+            image.classList.remove("hidden");
+            createKoreanGreeting(false);
+        } else {
+            video.classList.remove("hidden");
+            image.classList.add("hidden");
+            createKoreanGreeting(true);
+        }
+    });
+
+    toggle.checked = checkBox1;
+    if (toggle.checked === true) {
+        video.classList.add("hidden");
+        image.classList.remove("hidden");
+        createKoreanGreeting(false);
+    } else {
+        createKoreanGreeting(true);
+    }
 
     if (!audio || typeof audio.play !== "function") {
         showNotification(
@@ -109,7 +134,6 @@ document.addEventListener("DOMContentLoaded", function () {
     setInterval(updateClock, 1000);
     updateClock();
     updateDate();
-    createKoreanGreeting();
 
     const searchInput = document.getElementById("search");
     searchInput.addEventListener("keypress", function (e) {
@@ -207,7 +231,8 @@ if (!username) {
     }
 }
 
-async function createKoreanGreeting() {
+async function createKoreanGreeting(bo) {
+    if (!bo) return $("#greeting").text("");
     const res = await fetch("./greeting.json");
     const greetings = await res.json();
 
