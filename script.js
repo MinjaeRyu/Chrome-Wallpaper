@@ -4,6 +4,8 @@ let username = user !== null ? user : "";
 let volume1 = localStorage.getItem("volume");
 let volume = volume1 !== null ? volume1 : 0.2;
 let checkBox1 = localStorage.getItem("checkBox1") === "true";
+let isChaBirthday = false;
+let isUserBirthday = false;
 
 document.addEventListener("DOMContentLoaded", function () {
     const audio = document.getElementById("bg-audio");
@@ -125,14 +127,28 @@ document.addEventListener("DOMContentLoaded", function () {
 
         const res = await fetch("./config.json");
         const data = await res.json();
-        const birthday = data.birthday;
+        const charBirthday = data.charBirthday;
+        const userBirthday = data.userBirthday;
 
         if (
-            month === birthday.split("/")[0] &&
-            day === birthday.split("/")[1]
+            month === charBirthday.split("/")[0] &&
+            day === charBirthday.split("/")[1]
         ) {
+            isChaBirthday = true;
             showNotification(
                 "오늘은 내 생일이야. 축하해줘!",
+                "🎉",
+                false,
+                "birthDay"
+            );
+        }
+        if (
+            month === userBirthday.split("/")[0] &&
+            day === userBirthday.split("/")[1]
+        ) {
+            isUserBirthday = true;
+            showNotification(
+                `${username}님 생일 축하해요!`,
                 "🎉",
                 false,
                 "birthDay"
@@ -322,16 +338,17 @@ async function showNotification(msg, data, time = 5, type) {
         });
 
     container.appendChild(notification);
-    const noti = document.querySelector(".notification");
-    noti.onclick = (e) => {
-        if (e.target.closest(".close-btn")) return;
-
-        confetti({
-            particleCount: 1000,
-            spread: 200,
-            origin: { y: 0.5 },
+    if (isChaBirthday || isUserBirthday) {
+        notification.addEventListener("click", (e) => {
+            if (e.target.closest(".close-btn")) return;
+            confetti({
+                particleCount: 1000,
+                spread: 200,
+                origin: { y: 0.5 },
+            });
         });
-    };
+    }
+
     if (time !== false) {
         setTimeout(() => {
             notification.style.animation = "fadeOut 0.5s forwards";
