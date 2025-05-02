@@ -1,6 +1,6 @@
 {
     "manifest_version": 3,
-    "name": "New Tab",
+    "name": "Custom tab",
     "version": "1.0.3",
     "description": "Customize new tab page.",
     "chrome_url_overrides": {

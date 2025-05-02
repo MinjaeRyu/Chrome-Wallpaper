@@ -274,7 +274,7 @@ a:hover {
     top: 5vh;
     left: 50%;
     transform: translateX(-50%);
-    background: #fff9;
+    background: #fff;
     border-radius: calc(10px * var(--scale));
     padding: calc(16px * var(--scale));
     min-height: fit-content !important;
@@ -292,6 +292,11 @@ a:hover {
     height: calc(48px * var(--scale));
     font-size: calc(16px * var(--scale));
     width: 100%;
+    padding: 8px 12px;
+    font-size: 12px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    box-sizing: border-box;
 }
 
 #addShortcut #appendShortcut {
@@ -302,6 +307,7 @@ a:hover {
     font-size: calc(16px * var(--scale));
     color: #fff;
     width: 100%;
+    cursor: pointer;
 }
 
 .flex {
@@ -316,6 +322,7 @@ a:hover {
     height: 25px;
     border-radius: calc(4px * var(--scale));
     background: #fff;
+    cursor: pointer;
 }
 
 .audioControlWrapper {
@@ -442,7 +449,7 @@ a:hover {
     right: 20px;
     z-index: 1000;
     padding: 10px;
-    background-color: #fff;
+    background-color: rgba(255, 255, 255, 0.8);
     border: none;
     border-radius: 8px;
     cursor: pointer;
