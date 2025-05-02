@@ -372,16 +372,9 @@ submitBtn.addEventListener("click", () => {
 
 window.onerror = function (message, source, lineno, colno, error) {
     console.error(
-        "전역 에러 발생:",
-        message,
-        "소스:",
-        source,
-        "줄:",
-        lineno,
-        "컬럼:",
-        colno,
-        "에러 객체:",
-        error
+        `에러: ${message} @ ${source}:${lineno}:${colno}\n객체: ${error}`
     );
     showNotification("에러가 발생했어요. 로그를 확인해주세요.", "r", 10);
 };
+
+throw jdshkf;
