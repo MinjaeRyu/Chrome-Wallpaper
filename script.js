@@ -237,9 +237,14 @@ function createShortcuts() {
             form.classList.toggle("flex");
             form.classList.toggle("none");
             createShortcuts();
+            nameInput.value = "";
+            urlInput.value = "";
+            const hasFinalConsonant = Hangul.endsWithConsonant(name);
+            const particle = hasFinalConsonant ? "이" : "가";
+            showNotification(`${name}${particle} 추가되었습니다.`, "g");
+        } else {
+            showNotification("이름과 링크를 모두 입력해주세요.", "y");
         }
-        nameInput.value = "";
-        urlInput.value = "";
     };
 
     container.addEventListener("click", function (e) {
