@@ -327,7 +327,7 @@ async function showNotification(msg, data, time = 5, type) {
         if (e.target.closest(".close-btn")) return;
 
         confetti({
-            particleCount: 500,
+            particleCount: 1000,
             spread: 200,
             origin: { y: 0.5 },
         });
