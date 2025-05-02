@@ -131,7 +131,7 @@ document.addEventListener("DOMContentLoaded", function () {
             month === birthday.split("/")[0] &&
             day === birthday.split("/")[1]
         ) {
-            showNotification("오늘은 내 생일이야. 축하해줘!", "🎉", 30);
+            showNotification("오늘은 내 생일이야. 축하해줘!", "🎉", false);
         }
     }
 
