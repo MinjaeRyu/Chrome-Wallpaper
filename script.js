@@ -39,13 +39,15 @@ document.addEventListener("DOMContentLoaded", function () {
     if (!audio || typeof audio.play !== "function") {
         showNotification(
             "사용하시는 브라우저가 오디오 태그를 지원하지 않아요.",
-            "r"
+            "r",
+            10
         );
     }
     if (!video || typeof video.play !== "function") {
         showNotification(
             "사용하시는 브라우저가 비디오 태그를 지원하지 않아요.",
-            "r"
+            "r",
+            10
         );
     }
 
@@ -312,12 +314,14 @@ async function showNotification(msg, data, time = 5) {
 
     container.appendChild(notification);
 
-    setTimeout(() => {
-        notification.style.animation = "fadeOut 0.5s forwards";
+    if (time !== false) {
         setTimeout(() => {
-            notification.remove();
-        }, 500);
-    }, time * 1000);
+            notification.style.animation = "fadeOut 0.5s forwards";
+            setTimeout(() => {
+                notification.remove();
+            }, 500);
+        }, time * 1000);
+    }
 }
 
 function updateStatus() {
@@ -374,5 +378,5 @@ window.onerror = function (message, source, lineno, colno, error) {
     console.error(
         `에러: ${message} @ ${source}:${lineno}:${colno}\n객체: ${error}`
     );
-    showNotification("에러가 발생했어요. 로그를 확인해주세요.", "r", 10);
+    showNotification("에러가 발생했어요. 로그를 확인해주세요.", "r", false);
 };
