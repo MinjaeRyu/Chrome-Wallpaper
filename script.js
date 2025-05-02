@@ -16,7 +16,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     toggle.addEventListener("change", function () {
         localStorage.setItem("checkBox1", this.checked);
-        if (this.checked === true) {
+        if (this.checked) {
             video.classList.add("hidden");
             image.classList.remove("hidden");
             createKoreanGreeting(false);
@@ -28,7 +28,7 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 
     toggle.checked = checkBox1;
-    if (toggle.checked === true) {
+    if (toggle.checked) {
         video.classList.add("hidden");
         image.classList.remove("hidden");
         createKoreanGreeting(false);
@@ -59,13 +59,16 @@ document.addEventListener("DOMContentLoaded", function () {
 
     volumeSlider.value = volume;
     audio.volume = volume;
-
-    $("#volumeText").text(`${Math.floor(volume * 100)}%`);
+    document.getElementById("volumeText").textContent = `${Math.floor(
+        volume * 100
+    )}%`;
 
     volumeSlider.addEventListener("input", function () {
         audio.volume = volumeSlider.value;
         localStorage.setItem("volume", volumeSlider.value);
-        $("#volumeText").text(`${Math.floor(audio.volume * 100)}%`);
+        document.getElementById("volumeText").textContent = `${Math.floor(
+            audio.volume * 100
+        )}%`;
     });
 
     button.addEventListener("click", function () {
@@ -91,7 +94,9 @@ document.addEventListener("DOMContentLoaded", function () {
         const hours = String(now.getHours()).padStart(2, "0");
         const minutes = String(now.getMinutes()).padStart(2, "0");
         const seconds = String(now.getSeconds()).padStart(2, "0");
-        $("#time").text(`${hours}:${minutes}:${seconds}`);
+        document.getElementById(
+            "time"
+        ).textContent = `${hours}:${minutes}:${seconds}`;
         if (hours === "00" && minutes === "00" && seconds === "00") {
             updateDate();
         }
@@ -112,7 +117,10 @@ document.addEventListener("DOMContentLoaded", function () {
             "토요일",
         ];
         const weekday = weekdays[now.getDay()];
-        $("#date").text(`${year}.${month}.${day} ${weekday}`);
+        document.getElementById(
+            "date"
+        ).textContent = `${year}.${month}.${day} ${weekday}`;
+
         const res = await fetch("./config.json");
         const data = await res.json();
         const birthday = data.birthday;
@@ -150,67 +158,79 @@ let storedLinks = JSON.parse(localStorage.getItem("shortcuts"));
 let shortcutData = storedLinks !== null ? storedLinks : links;
 
 function createShortcuts() {
-    const container = $("#shortcutContainer");
-    const closeBtn = $("#closeShortcut");
-    const form = $("#addShortcut");
-    const nameInput = $("#addName");
-    const urlInput = $("#addUrl");
-    const addBtn = $("#appendShortcut");
+    const container = document.getElementById("shortcutContainer");
+    const closeBtn = document.getElementById("closeShortcut");
+    const form = document.getElementById("addShortcut");
+    const nameInput = document.getElementById("addName");
+    const urlInput = document.getElementById("addUrl");
+    const addBtn = document.getElementById("appendShortcut");
 
-    container.empty();
+    container.innerHTML = "";
 
     shortcutData.forEach((link) => {
-        const element = `
-            <div class="link">
-                <a href="${link.url}" rel="noopener noreferrer" title="${link.url}" class="shortcutLink">
-                    <img src="https://www.google.com/s2/favicons?domain=${link.url}&sz=48" />
-                    <p>${link.name}</p>
-                </a>
-                <a class="removeLink" title="Delete ${link.name} shortcut" removeLink="${link.url}">
-                    <span class="material-symbols-outlined">close</span>
-                </a>
-            </div>`;
-        container.append(element);
-    });
-
-    container.append(`
-        <div class="link">
-            <a id="createShortcut" title="Add new shortcut" class="shortcutLink">
-                <span class="material-symbols-outlined">add</span>
-                <p>Add</p>
+        const element = document.createElement("div");
+        element.className = "link";
+        element.innerHTML = `
+            <a href="${link.url}" rel="noopener noreferrer" title="${link.url}" class="shortcutLink">
+                <img src="https://www.google.com/s2/favicons?domain=${link.url}&sz=48" />
+                <p>${link.name}</p>
             </a>
-        </div>`);
-
-    $("#createShortcut").click(() => {
-        form.toggleClass("flex").toggleClass("none");
+            <a class="removeLink" title="Delete ${link.name} shortcut" data-url="${link.url}">
+                <span class="material-symbols-outlined">close</span>
+            </a>
+        `;
+        container.appendChild(element);
     });
 
-    closeBtn.click(() => {
-        form.toggleClass("none").toggleClass("flex");
-    });
+    const addElement = document.createElement("div");
+    addElement.className = "link";
+    addElement.innerHTML = `
+        <a id="createShortcut" title="Add new shortcut" class="shortcutLink">
+            <span class="material-symbols-outlined">add</span>
+            <p>Add</p>
+        </a>
+    `;
+    container.appendChild(addElement);
 
-    addBtn.click(() => {
-        let name = nameInput.val();
-        let url = urlInput.val();
+    document.getElementById("createShortcut").onclick = () => {
+        form.classList.toggle("flex");
+        form.classList.toggle("none");
+    };
+
+    closeBtn.onclick = () => {
+        form.classList.toggle("none");
+        form.classList.toggle("flex");
+    };
+
+    addBtn.onclick = () => {
+        let name = nameInput.value.trim();
+        let url = urlInput.value.trim();
         if (name && url) {
-            if (!url.includes("http://") && !url.includes("https://")) {
+            if (!url.startsWith("http://") && !url.startsWith("https://")) {
                 url = `http://${url}`;
             }
             shortcutData.push({ name, url });
             localStorage.setItem("shortcuts", JSON.stringify(shortcutData));
-            form.toggleClass("flex").toggleClass("none");
+            form.classList.toggle("flex");
+            form.classList.toggle("none");
             createShortcuts();
         }
-        nameInput.val("");
-        urlInput.val("");
-    });
+        nameInput.value = "";
+        urlInput.value = "";
+    };
 
-    $(document).on("click", ".removeLink", function (e) {
-        e.preventDefault();
-        const targetUrl = $(this).attr("removeLink");
-        shortcutData = shortcutData.filter((link) => link.url !== targetUrl);
-        localStorage.setItem("shortcuts", JSON.stringify(shortcutData));
-        createShortcuts();
+    container.addEventListener("click", function (e) {
+        if (e.target.closest(".removeLink")) {
+            e.preventDefault();
+            const targetUrl = e.target
+                .closest(".removeLink")
+                .getAttribute("data-url");
+            shortcutData = shortcutData.filter(
+                (link) => link.url !== targetUrl
+            );
+            localStorage.setItem("shortcuts", JSON.stringify(shortcutData));
+            createShortcuts();
+        }
     });
 }
 
@@ -231,7 +251,7 @@ if (!username) {
 }
 
 async function createKoreanGreeting(bo) {
-    if (!bo) return $("#greeting").text("");
+    if (!bo) return (document.getElementById("greeting").textContent = "");
     const res = await fetch("./config.json");
     const greetings = await res.json();
 
@@ -249,9 +269,12 @@ async function createKoreanGreeting(bo) {
 
     const randomGreeting =
         greetingList[Math.floor(Math.random() * greetingList.length)];
-
-    $("#greeting").text(randomGreeting.replace("${username}", username));
+    document.getElementById("greeting").textContent = randomGreeting.replace(
+        "${username}",
+        username
+    );
 }
+
 async function showNotification(msg, data, time = 5) {
     let text = "";
     let color = "";
@@ -271,9 +294,7 @@ async function showNotification(msg, data, time = 5) {
         text = data;
     }
 
-    const statusDot = `
-        <span class="status-dot" style="${color}">${text}</span>
-    `;
+    const statusDot = `<span class="status-dot" style="${color}">${text}</span>`;
 
     notification.innerHTML = `
         ${statusDot}
@@ -282,10 +303,12 @@ async function showNotification(msg, data, time = 5) {
         </span>
         ${msg}
     `;
-    const closeBtn = notification.querySelector(".close-btn");
-    closeBtn.addEventListener("click", function () {
-        notification.remove();
-    });
+
+    notification
+        .querySelector(".close-btn")
+        .addEventListener("click", function () {
+            notification.remove();
+        });
 
     container.appendChild(notification);
 
@@ -311,6 +334,7 @@ if (!navigator.onLine) {
 
 window.addEventListener("online", updateStatus);
 window.addEventListener("offline", updateStatus);
+
 const settingsBtn = document.getElementById("settingsButton");
 const settingsPanel = document.getElementById("settingsPanel");
 const closeSettingsBtn = document.getElementById("closeSettings");
@@ -338,8 +362,9 @@ const submitBtn = document.getElementById("submitBtn");
 
 input.value = username;
 submitBtn.addEventListener("click", () => {
-    if (username === input.value)
+    if (username === input.value) {
         return showNotification("전에 이름과 같아요.", "y");
+    }
     localStorage.setItem("username", JSON.stringify(input.value));
     showNotification("이름이 성공적으로 변경했어요.", "g");
     username = input.value;
