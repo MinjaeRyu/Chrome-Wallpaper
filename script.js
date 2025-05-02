@@ -131,7 +131,12 @@ document.addEventListener("DOMContentLoaded", function () {
             month === birthday.split("/")[0] &&
             day === birthday.split("/")[1]
         ) {
-            showNotification("오늘은 내 생일이야. 축하해줘!", "🎉", false);
+            showNotification(
+                "오늘은 내 생일이야. 축하해줘!",
+                "🎉",
+                false,
+                "birthDay"
+            );
         }
     }
 
@@ -277,7 +282,7 @@ async function createKoreanGreeting(bo) {
     );
 }
 
-async function showNotification(msg, data, time = 5) {
+async function showNotification(msg, data, time = 5, type) {
     let text = "";
     let color = "";
     const container = document.getElementById("notification-container");
@@ -294,6 +299,10 @@ async function showNotification(msg, data, time = 5) {
         color = "background-color: #F44336;";
     } else {
         text = data;
+    }
+    if (type) {
+        if (type === "birthDay") {
+        }
     }
 
     const statusDot = `<span class="status-dot" style="${color}">${text}</span>`;
@@ -313,7 +322,16 @@ async function showNotification(msg, data, time = 5) {
         });
 
     container.appendChild(notification);
+    const noti = document.querySelector(".notification");
+    noti.onclick = (e) => {
+        if (e.target.closest(".close-btn")) return;
 
+        confetti({
+            particleCount: 500,
+            spread: 200,
+            origin: { y: 0.5 },
+        });
+    };
     if (time !== false) {
         setTimeout(() => {
             notification.style.animation = "fadeOut 0.5s forwards";
