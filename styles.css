@@ -323,6 +323,7 @@ a:hover {
     border-radius: calc(4px * var(--scale));
     background: #fff;
     cursor: pointer;
+    margin-left: 92%;
 }
 
 .audioControlWrapper {
