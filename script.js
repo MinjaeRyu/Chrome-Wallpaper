@@ -376,5 +376,3 @@ window.onerror = function (message, source, lineno, colno, error) {
     );
     showNotification("에러가 발생했어요. 로그를 확인해주세요.", "r", 10);
 };
-
-throw jdshkf;
