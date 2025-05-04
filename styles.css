@@ -3,6 +3,12 @@
     padding: 0;
     box-sizing: border-box;
     font-family: "Poppins", sans-serif;
+    -webkit-user-drag: none;
+    user-drag: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
 }
 html,
 body {
@@ -273,6 +279,7 @@ a:hover {
     position: absolute;
     top: 5vh;
     left: 50%;
+    top: 30%;
     transform: translateX(-50%);
     background: #fff;
     border-radius: calc(10px * var(--scale));
@@ -323,10 +330,23 @@ a:hover {
     border-radius: calc(4px * var(--scale));
     background: #fff;
     cursor: pointer;
-    margin-left: 92%;
+    background-color: #fff0;
+    cursor: pointer;
+    position: absolute;
+    top: 0;
+    right: 20px;
+    padding: 16px;
 }
 
 .audioControlWrapper {
+    position: absolute;
+    align-items: center;
+    display: flex;
+    flex-direction: row;
+    gap: 8px;
+    width: 100%;
+}
+.nameWrapper {
     position: absolute;
     align-items: center;
     display: flex;
@@ -374,6 +394,7 @@ a:hover {
     gap: 10px;
     z-index: 99999;
 }
+
 .notification {
     display: flex;
     align-items: center;
@@ -389,6 +410,9 @@ a:hover {
     padding-right: 50px;
     transform: translateY(20px);
     animation: fadeIn 0.5s forwards;
+}
+.notification a {
+    color: #0072ff;
 }
 
 .status-dot {
@@ -553,11 +577,11 @@ a:hover {
     font-size: 12px;
     border: 1px solid #ccc;
     border-radius: 6px;
-    width: 70%;
+    width: 65%;
     box-sizing: border-box;
 }
 
-#submitBtn {
+#saveBtn {
     margin-top: 10px;
     padding: 10px 20px;
     font-size: 12px;
@@ -569,8 +593,7 @@ a:hover {
     position: absolute;
     bottom: 0;
     right: 0;
-    margin-bottom: 65px;
-    margin-right: 20px;
+    margin-right: 35px;
 }
 #submitBtn:hover {
     background-color: #015cc8;
