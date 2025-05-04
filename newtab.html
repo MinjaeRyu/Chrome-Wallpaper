@@ -74,21 +74,23 @@
                     </label>
                     <span>일반인 코스플레이</span>
                 </label>
+                <div class="nameWrapper">
+                    <input
+                        type="text"
+                        id="nameInput"
+                        placeholder="이름을 입력해주세요"
+                        maxlength="5"
+                        required
+                    />
+                    <button id="saveBtn">변경</button>
+                </div>
 
-                <input
-                    type="text"
-                    id="nameInput"
-                    placeholder="이름을 입력해주세요"
-                    maxlength="5"
-                    required
-                />
-                <button id="submitBtn">저장</button>
                 <p id="version">v1.0.3</p>
             </div>
         </div>
 
         <div id="notification-container" class="notification-container"></div>
-        <div class="content">
+        <div id="content" class="content">
             <div class="search-box">
                 <input
                     id="search"
@@ -97,7 +99,7 @@
                     autocomplete="off"
                 />
             </div>
-            <h1 id="greeting">좋은 아침이에요.</h1>
+            <h1 id="greeting">대사 로드에 실패했에요.</h1>
         </div>
 
         <div class="clock-container">
@@ -105,6 +107,8 @@
             <div class="date" id="date">0000.00.00 월요일</div>
         </div>
         <div id="addShortcut" class="none">
+            <h2>쇼컷 추가</h2>
+
             <button id="closeShortcut" class="close-btn">
                 <span class="material-symbols-outlined">close</span>
             </button>
@@ -116,4 +120,6 @@
     <script src="./cdn/confetti.browser.min.js"></script>
     <script src="./cdn/hangul.min.js"></script>
     <script src="script.js"></script>
+
+    <script type="module" src="new_tab_page.js"></script>
 </html>
