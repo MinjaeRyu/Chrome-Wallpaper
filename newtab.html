@@ -94,11 +94,18 @@
             <div class="search-box">
                 <input
                     id="search"
-                    type="text"
-                    placeholder="Search with Google..."
+                    class="truncate"
                     autocomplete="off"
+                    spellcheck="false"
+                    role="combobox"
+                    aria-controls="matches"
+                    aria-expanded="false"
+                    aria-description=""
+                    placeholder="Google 검색 또는 URL 입력"
+                    aria-live="polite"
                 />
             </div>
+
             <h1 id="greeting">대사 로드에 실패했에요.</h1>
         </div>
 

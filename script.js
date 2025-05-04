@@ -169,9 +169,13 @@ document.addEventListener("DOMContentLoaded", function () {
     const searchInput = document.getElementById("search");
     searchInput.addEventListener("keypress", function (e) {
         if (e.key === "Enter") {
+            showNotification(searchInput.value.startsWith("http"));
+            if (searchInput.value.startsWith("http"))
+                return (window.location.href = searchInput.value);
+
             const query = encodeURIComponent(searchInput.value.trim());
             if (query) {
-                window.location.href = `https://www.google.com/search?q=${query}`;
+                return (window.location.href = `https://www.google.com/search?q=${query}`);
             }
         }
     });
@@ -200,11 +204,20 @@ function createShortcuts() {
         const element = document.createElement("div");
         element.className = "link";
         element.innerHTML = `
-            <a href="${link.url}" rel="noopener noreferrer" title="${link.url}" class="shortcutLink">
-                <img src="https://www.google.com/s2/favicons?domain=${link.url}&sz=48" />
+            <a href="${link.url}" rel="noopener noreferrer" title="${
+            link.url
+        }" class="shortcutLink">
+            ${
+                navigator.onLine
+                    ? `<img src="https://www.google.com/s2/favicons?domain=${link.url}&sz=48" />`
+                    : `<img style="background-color: $fff0; border: none;" />`
+            }
+                
                 <p>${link.name}</p>
             </a>
-            <a class="removeLink" title="Delete ${link.name} shortcut" data-url="${link.url}">
+            <a class="removeLink" title="Delete ${
+                link.name
+            } shortcut" data-url="${link.url}">
                 <span class="material-symbols-outlined">close</span>
             </a>
         `;
@@ -236,7 +249,7 @@ function createShortcuts() {
         let url = urlInput.value.trim();
         if (name && url) {
             if (!url.startsWith("http://") && !url.startsWith("https://")) {
-                url = `http://${url}`;
+                return showNotification("유료한 링크를 기입해주세요.", "y");
             }
             shortcutData.push({ name, url });
             localStorage.setItem("shortcuts", JSON.stringify(shortcutData));
@@ -308,6 +321,7 @@ async function createKoreanGreeting(bo) {
 
     const randomGreeting =
         greetingList[Math.floor(Math.random() * greetingList.length)];
+
     document.getElementById("greeting").textContent = randomGreeting.replace(
         "${username}",
         username
@@ -379,11 +393,12 @@ async function showNotification(msg, data = "w", time = 5, type) {
 }
 
 function updateStatus() {
-    if (navigator.onLine) {
-        showNotification("네트워크에 다시 연결되었어요.", "g");
-    } else {
-        showNotification("네트워크 연결이 끊어졌어요.", "r");
-    }
+    showNotification(
+        navigator.onLine
+            ? "네트워크에 다시 연결되었어요."
+            : "네트워크 연결이 끊어졌어요.",
+        navigator.onLine ? "g" : "r"
+    );
 }
 
 if (!navigator.onLine) {
@@ -411,7 +426,7 @@ document.addEventListener("click", (e) => {
     const searchInput = document.getElementById("search");
     const form = document.getElementById("addShortcut");
     const addBtn = document.getElementById("createShortcut");
-
+    const fake = localStorage.getItem("checkBox1");
     if (
         !settingsPanel.classList.contains("hidden") &&
         !settingsPanel.contains(e.target) &&
@@ -428,8 +443,10 @@ document.addEventListener("click", (e) => {
         form.classList.toggle("flex");
     }
     if (
-        (content.contains(e.target) && !searchInput.contains(e.target)) ||
-        e.target === document.getElementById("shortcutContainer")
+        (content.contains(e.target) &&
+            !searchInput.contains(e.target) &&
+            !fake) ||
+        (e.target === document.getElementById("shortcutContainer") && !fake)
     ) {
         createKoreanGreeting(true);
     }
@@ -446,7 +463,7 @@ document.addEventListener("keypress", (e) => {
             let url = urlInput.value.trim();
             if (name && url) {
                 if (!url.startsWith("http://") && !url.startsWith("https://")) {
-                    url = `http://${url}`;
+                    return showNotification("유료한 링크를 기입해주세요.", "y");
                 }
                 shortcutData.push({ name, url });
                 localStorage.setItem("shortcuts", JSON.stringify(shortcutData));
@@ -488,12 +505,20 @@ input.addEventListener("keypress", (e) => {
     }
 });
 saveBtn.addEventListener("click", () => {
-    if (username === input.value) {
+    if (username === input.value)
         return showNotification("변경 전과 이름이 같아요.", "y");
-    }
+
     localStorage.setItem("username", JSON.stringify(input.value));
     showNotification("이름이 성공적으로 변경했어요.", "g");
     username = input.value;
+});
+
+document.addEventListener("dragstart", function (e) {
+    e.preventDefault();
+});
+
+document.addEventListener("selectstart", function (e) {
+    e.preventDefault();
 });
 
 window.onerror = function (message, source, lineno, colno, error) {
@@ -502,10 +527,3 @@ window.onerror = function (message, source, lineno, colno, error) {
     );
     showNotification("에러가 발생했어요. 로그를 확인해주세요.", "r", 10);
 };
-document.addEventListener("dragstart", function (e) {
-    e.preventDefault();
-});
-
-document.addEventListener("selectstart", function (e) {
-    e.preventDefault();
-});

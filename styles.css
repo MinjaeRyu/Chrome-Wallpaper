@@ -85,7 +85,7 @@ body {
 }
 .search-box input {
     padding: 5px 20px;
-    width: 400px;
+    width: 500px;
     max-width: 90%;
     font-size: 18px;
     border: none;
@@ -99,6 +99,15 @@ body {
 
 .search-box input::placeholder {
     color: rgba(255, 255, 255, 0.7);
+}
+.search-box input:focus::placeholder {
+    color: rgba(255, 255, 255, 0);
+}
+.search-box input:focus {
+    background: rgba(255, 255, 255, 0.7);
+    box-shadow: 0 0 10px rgba(255, 255, 255, 1);
+    color: #000;
+    text-align: left;
 }
 *,
 *::before,
