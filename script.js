@@ -22,6 +22,12 @@ document.addEventListener("DOMContentLoaded", function () {
             video.classList.add("hidden");
             image.classList.remove("hidden");
             createKoreanGreeting(false);
+            if (localStorage.getItem("isPlaying") === "true")
+                showNotification(
+                    "완벽한 일반인 코스플레이를 위해 소리를 끄는 것도 잊지마세요!",
+                    "y",
+                    10
+                );
         } else {
             video.classList.remove("hidden");
             image.classList.add("hidden");
@@ -265,15 +271,20 @@ function createShortcuts() {
 createShortcuts();
 
 if (!username) {
-    username = prompt("당신의 이름을 알려주시겠어요?");
+    let username = prompt("당신의 이름을 알려주시겠어요?").slice(0, 5);
     if (username) {
         localStorage.setItem("username", JSON.stringify(username));
+        showNotification(
+            `${username}님 안녕하세요!<a href="https://youtube.com">aa</a>`,
+            "b"
+        );
     } else {
         fetch("./config.json")
             .then((res) => res.json())
             .then((greetings) => {
                 username = greetings.defaultName;
                 localStorage.setItem("username", JSON.stringify(username));
+                showNotification(`${username}님 안녕하세요!`, "b");
             });
     }
 }
@@ -303,13 +314,16 @@ async function createKoreanGreeting(bo) {
     );
 }
 
-async function showNotification(msg, data, time = 5, type) {
+async function showNotification(msg, data = "w", time = 5, type) {
     let text = "";
     let color = "";
     const container = document.getElementById("notification-container");
 
     const notification = document.createElement("div");
     notification.className = "notification";
+    if (data === "w") {
+        color = "background-color: #fff;";
+    }
     if (data === "y") {
         color = "background-color: #FFEB3B;";
     } else if (data === "b") {
@@ -382,6 +396,7 @@ window.addEventListener("offline", updateStatus);
 const settingsBtn = document.getElementById("settingsButton");
 const settingsPanel = document.getElementById("settingsPanel");
 const closeSettingsBtn = document.getElementById("closeSettings");
+const addShortcut = document.getElementById("addShortcut");
 
 settingsBtn.addEventListener("click", () => {
     settingsPanel.classList.toggle("hidden");
@@ -392,6 +407,11 @@ closeSettingsBtn.addEventListener("click", () => {
 });
 
 document.addEventListener("click", (e) => {
+    const content = document.getElementById("content");
+    const searchInput = document.getElementById("search");
+    const form = document.getElementById("addShortcut");
+    const addBtn = document.getElementById("createShortcut");
+
     if (
         !settingsPanel.classList.contains("hidden") &&
         !settingsPanel.contains(e.target) &&
@@ -399,15 +419,77 @@ document.addEventListener("click", (e) => {
     ) {
         settingsPanel.classList.add("hidden");
     }
+    if (
+        !form.classList.contains("none") &&
+        !form.contains(e.target) &&
+        !addBtn.contains(e.target)
+    ) {
+        form.classList.toggle("none");
+        form.classList.toggle("flex");
+    }
+    if (
+        (content.contains(e.target) && !searchInput.contains(e.target)) ||
+        e.target === document.getElementById("shortcutContainer")
+    ) {
+        createKoreanGreeting(true);
+    }
+});
+
+document.addEventListener("keypress", (e) => {
+    if (e.key === "Enter") {
+        const form = document.getElementById("addShortcut");
+        const nameInput = document.getElementById("addName");
+        const urlInput = document.getElementById("addUrl");
+
+        if (!addShortcut.classList.contains("none")) {
+            let name = nameInput.value.trim();
+            let url = urlInput.value.trim();
+            if (name && url) {
+                if (!url.startsWith("http://") && !url.startsWith("https://")) {
+                    url = `http://${url}`;
+                }
+                shortcutData.push({ name, url });
+                localStorage.setItem("shortcuts", JSON.stringify(shortcutData));
+                form.classList.toggle("flex");
+                form.classList.toggle("none");
+                createShortcuts();
+                nameInput.value = "";
+                urlInput.value = "";
+                const hasFinalConsonant = Hangul.endsWithConsonant(name);
+                const particle = hasFinalConsonant ? "이" : "가";
+                showNotification(`${name}${particle} 추가되었습니다.`, "g");
+            } else {
+                showNotification("이름과 링크를 모두 입력해주세요.", "y");
+            }
+        }
+    }
 });
 
 const input = document.getElementById("nameInput");
-const submitBtn = document.getElementById("submitBtn");
+const saveBtn = document.getElementById("saveBtn");
 
 input.value = username;
-submitBtn.addEventListener("click", () => {
+
+input.addEventListener("keypress", (e) => {
+    if (e.key === "Enter") {
+        if (!settingsPanel.classList.contains("hidden")) {
+            if (username === input.value) {
+                return showNotification("변경 전과 이름이 같아요.", "y");
+            }
+            localStorage.setItem("username", JSON.stringify(input.value));
+            const hasFinalConsonant = Hangul.endsWithConsonant(input.value);
+            const particle = hasFinalConsonant ? "으로" : "로";
+            showNotification(
+                `이름을 ${input.value}${particle} 변경했어요.`,
+                "g"
+            );
+            username = input.value;
+        }
+    }
+});
+saveBtn.addEventListener("click", () => {
     if (username === input.value) {
-        return showNotification("전에 이름과 같아요.", "y");
+        return showNotification("변경 전과 이름이 같아요.", "y");
     }
     localStorage.setItem("username", JSON.stringify(input.value));
     showNotification("이름이 성공적으로 변경했어요.", "g");
@@ -418,5 +500,12 @@ window.onerror = function (message, source, lineno, colno, error) {
     console.error(
         `에러: ${message} @ ${source}:${lineno}:${colno}\n객체: ${error}`
     );
-    showNotification("에러가 발생했어요. 로그를 확인해주세요.", "r", false);
+    showNotification("에러가 발생했어요. 로그를 확인해주세요.", "r", 10);
 };
+document.addEventListener("dragstart", function (e) {
+    e.preventDefault();
+});
+
+document.addEventListener("selectstart", function (e) {
+    e.preventDefault();
+});
