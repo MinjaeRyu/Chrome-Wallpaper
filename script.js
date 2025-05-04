@@ -170,7 +170,8 @@ document.addEventListener("DOMContentLoaded", function () {
     searchInput.addEventListener("keypress", function (e) {
         if (e.key === "Enter") {
             showNotification(searchInput.value.startsWith("http"));
-            if (searchInput.value.startsWith("http"))
+            const urlRegex = /^(http|https):\/\/[\w\-]+(\.[\w\-]+)+[/#?]?.*$/;
+            if (urlRegex.test(searchInput.value))
                 return (window.location.href = searchInput.value);
 
             const query = encodeURIComponent(searchInput.value.trim());
