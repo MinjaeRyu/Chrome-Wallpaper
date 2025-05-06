@@ -7,7 +7,7 @@ let checkBox1 = localStorage.getItem("checkBox1") === "true";
 let isChaBirthday = false;
 let isUserBirthday = false;
 
-document.addEventListener("DOMContentLoaded", function () {
+document.addEventListener("DOMContentLoaded", () => {
     const audio = document.getElementById("bg-audio");
     const button = document.getElementById("toggleButton");
     const audioIcon = document.getElementById("audioIcon");
@@ -73,7 +73,7 @@ document.addEventListener("DOMContentLoaded", function () {
         volume * 100
     )}%`;
 
-    volumeSlider.addEventListener("input", function () {
+    volumeSlider.addEventListener("input", () => {
         audio.volume = volumeSlider.value;
         localStorage.setItem("volume", volumeSlider.value);
         document.getElementById("volumeText").textContent = `${Math.floor(
@@ -81,7 +81,7 @@ document.addEventListener("DOMContentLoaded", function () {
         )}%`;
     });
 
-    button.addEventListener("click", function () {
+    button.addEventListener("click", () => {
         if (audio.paused) {
             audio
                 .play()
@@ -167,7 +167,7 @@ document.addEventListener("DOMContentLoaded", function () {
     updateDate();
 
     const searchInput = document.getElementById("search");
-    searchInput.addEventListener("keypress", function (e) {
+    searchInput.addEventListener("keypress", (e) => {
         if (e.key === "Enter") {
             showNotification(searchInput.value.startsWith("http"));
             const urlRegex = /^(http|https):\/\/[\w\-]+(\.[\w\-]+)+[/#?]?.*$/;
@@ -267,7 +267,7 @@ function createShortcuts() {
         }
     };
 
-    container.addEventListener("click", function (e) {
+    container.addEventListener("click", (e) => {
         if (e.target.closest(".removeLink")) {
             e.preventDefault();
             const targetUrl = e.target
@@ -365,11 +365,9 @@ async function showNotification(msg, data = "w", time = 5, type) {
         ${msg}
     `;
 
-    notification
-        .querySelector(".close-btn")
-        .addEventListener("click", function () {
-            notification.remove();
-        });
+    notification.querySelector(".close-btn").addEventListener("click", () => {
+        notification.remove();
+    });
 
     container.appendChild(notification);
     if (isChaBirthday || isUserBirthday) {
@@ -514,17 +512,20 @@ saveBtn.addEventListener("click", () => {
     username = input.value;
 });
 
-document.addEventListener("dragstart", function (e) {
+document.addEventListener("dragstart", (e) => {
     e.preventDefault();
 });
 
-document.addEventListener("selectstart", function (e) {
+document.addEventListener("selectstart", (e) => {
     e.preventDefault();
 });
 
-window.onerror = function (message, source, lineno, colno, error) {
+window.onerror = (message, source, lineno, colno, error) => {
     console.error(
         `에러: ${message} @ ${source}:${lineno}:${colno}\n객체: ${error}`
     );
     showNotification("에러가 발생했어요. 로그를 확인해주세요.", "r", 10);
 };
+
+const checkJsLoad = document.getElementById("checkJsLoad");
+checkJsLoad.remove();

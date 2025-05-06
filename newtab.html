@@ -106,12 +106,12 @@
                 />
             </div>
 
-            <h1 id="greeting">대사 로드에 실패했어요.</h1>
+            <h1 id="greeting"></h1>
         </div>
 
         <div class="clock-container">
-            <div class="time" id="time">00:00:00</div>
-            <div class="date" id="date">0000.00.00 월요일</div>
+            <div class="time" id="time"></div>
+            <div class="date" id="date"></div>
         </div>
         <div id="addShortcut" class="none">
             <h2>쇼컷 추가</h2>
@@ -123,8 +123,10 @@
             <input type="text" id="addUrl" placeholder="링크" />
             <button id="appendShortcut">추가</button>
         </div>
+        <div id="checkJsLoad"></div>
     </body>
     <script src="./cdn/confetti.browser.min.js"></script>
     <script src="./cdn/hangul.min.js"></script>
     <script src="script.js"></script>
+    <script src="error.js"></script>
 </html>
