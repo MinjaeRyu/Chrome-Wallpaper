@@ -489,9 +489,12 @@ input.value = username;
 input.addEventListener("keypress", (e) => {
     if (e.key === "Enter") {
         if (!settingsPanel.classList.contains("hidden")) {
-            if (username === input.value) {
+            if (username === input.value)
                 return showNotification("변경 전과 이름이 같아요.", "y");
-            }
+
+            if (!username)
+                return showNotification("이름을 공백할 수 없어요.", "y");
+
             localStorage.setItem("username", JSON.stringify(input.value));
             const hasFinalConsonant = Hangul.endsWithConsonant(input.value);
             const particle = hasFinalConsonant ? "으로" : "로";
@@ -506,7 +509,7 @@ input.addEventListener("keypress", (e) => {
 saveBtn.addEventListener("click", () => {
     if (username === input.value)
         return showNotification("변경 전과 이름이 같아요.", "y");
-
+    if (!username) return showNotification("이름을 공백할 수 없어요.", "y");
     localStorage.setItem("username", JSON.stringify(input.value));
     showNotification("이름이 성공적으로 변경했어요.", "g");
     username = input.value;
