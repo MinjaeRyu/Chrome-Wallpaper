@@ -7,7 +7,7 @@ let checkBox1 = localStorage.getItem("checkBox1") === "true";
 let isChaBirthday = false;
 let isUserBirthday = false;
 
-document.addEventListener("DOMContentLoaded", () => {
+document.addEventListener("DOMContentLoaded", function () {
     const audio = document.getElementById("bg-audio");
     const button = document.getElementById("toggleButton");
     const audioIcon = document.getElementById("audioIcon");
@@ -73,7 +73,7 @@ document.addEventListener("DOMContentLoaded", () => {
         volume * 100
     )}%`;
 
-    volumeSlider.addEventListener("input", () => {
+    volumeSlider.addEventListener("input", function () {
         audio.volume = volumeSlider.value;
         localStorage.setItem("volume", volumeSlider.value);
         document.getElementById("volumeText").textContent = `${Math.floor(
@@ -81,7 +81,7 @@ document.addEventListener("DOMContentLoaded", () => {
         )}%`;
     });
 
-    button.addEventListener("click", () => {
+    button.addEventListener("click", function () {
         if (audio.paused) {
             audio
                 .play()
@@ -167,7 +167,7 @@ document.addEventListener("DOMContentLoaded", () => {
     updateDate();
 
     const searchInput = document.getElementById("search");
-    searchInput.addEventListener("keypress", (e) => {
+    searchInput.addEventListener("keypress", function (e) {
         if (e.key === "Enter") {
             showNotification(searchInput.value.startsWith("http"));
             const urlRegex = /^(http|https):\/\/[\w\-]+(\.[\w\-]+)+[/#?]?.*$/;
@@ -235,17 +235,17 @@ function createShortcuts() {
     `;
     container.appendChild(addElement);
 
-    document.getElementById("createShortcut").onclick = () => {
+    document.getElementById("createShortcut").onclick = function () {
         form.classList.toggle("flex");
         form.classList.toggle("none");
     };
 
-    closeBtn.onclick = () => {
+    closeBtn.onclick = function () {
         form.classList.toggle("none");
         form.classList.toggle("flex");
     };
 
-    addBtn.onclick = () => {
+    addBtn.onclick = function () {
         let name = nameInput.value.trim();
         let url = urlInput.value.trim();
         if (name && url) {
@@ -267,7 +267,7 @@ function createShortcuts() {
         }
     };
 
-    container.addEventListener("click", (e) => {
+    container.addEventListener("click", function (e) {
         if (e.target.closest(".removeLink")) {
             e.preventDefault();
             const targetUrl = e.target
@@ -365,13 +365,15 @@ async function showNotification(msg, data = "w", time = 5, type) {
         ${msg}
     `;
 
-    notification.querySelector(".close-btn").addEventListener("click", () => {
-        notification.remove();
-    });
+    notification
+        .querySelector(".close-btn")
+        .addEventListener("click", function () {
+            notification.remove();
+        });
 
     container.appendChild(notification);
     if (isChaBirthday || isUserBirthday) {
-        notification.addEventListener("click", (e) => {
+        notification.addEventListener("click", function (e) {
             if (e.target.closest(".close-btn")) return;
             confetti({
                 particleCount: 1000,
@@ -412,15 +414,15 @@ const settingsPanel = document.getElementById("settingsPanel");
 const closeSettingsBtn = document.getElementById("closeSettings");
 const addShortcut = document.getElementById("addShortcut");
 
-settingsBtn.addEventListener("click", () => {
+settingsBtn.addEventListener("click", function () {
     settingsPanel.classList.toggle("hidden");
 });
 
-closeSettingsBtn.addEventListener("click", () => {
+closeSettingsBtn.addEventListener("click", function () {
     settingsPanel.classList.toggle("hidden");
 });
 
-document.addEventListener("click", (e) => {
+document.addEventListener("click", function (e) {
     const content = document.getElementById("content");
     const searchInput = document.getElementById("search");
     const form = document.getElementById("addShortcut");
@@ -451,7 +453,7 @@ document.addEventListener("click", (e) => {
     }
 });
 
-document.addEventListener("keypress", (e) => {
+document.addEventListener("keypress", function (e) {
     if (e.key === "Enter") {
         const form = document.getElementById("addShortcut");
         const nameInput = document.getElementById("addName");
@@ -486,7 +488,7 @@ const saveBtn = document.getElementById("saveBtn");
 
 input.value = username;
 
-input.addEventListener("keypress", (e) => {
+input.addEventListener("keypress", function (e) {
     if (e.key === "Enter") {
         if (!settingsPanel.classList.contains("hidden")) {
             if (username === input.value)
@@ -506,7 +508,7 @@ input.addEventListener("keypress", (e) => {
         }
     }
 });
-saveBtn.addEventListener("click", () => {
+saveBtn.addEventListener("click", function () {
     if (username === input.value)
         return showNotification("변경 전과 이름이 같아요.", "y");
     if (!username) return showNotification("이름을 공백할 수 없어요.", "y");
@@ -515,11 +517,11 @@ saveBtn.addEventListener("click", () => {
     username = input.value;
 });
 
-document.addEventListener("dragstart", (e) => {
+document.addEventListener("dragstart", function (e) {
     e.preventDefault();
 });
 
-document.addEventListener("selectstart", (e) => {
+document.addEventListener("selectstart", function (e) {
     e.preventDefault();
 });
 

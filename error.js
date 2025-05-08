@@ -15,7 +15,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 showNotification("날짜 로드에 실패했어요.", "r", false);
             if (greeting.innerText === "")
                 showNotification("대사 로드에 실패했어요.", "r", false);
-        }, 50);
+        }, 1000);
     } catch (error) {
         console.log(error);
     }
